@@ -375,7 +375,11 @@ define('demo-app/serializers/application', ['exports', 'ember-data'], function (
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.default = _emberData.default.JSONAPISerializer.extend({});
+  exports.default = _emberData.default.JSONAPISerializer.extend({
+    keyForAttribute: function keyForAttribute(key) {
+      return key;
+    }
+  });
 });
 define('demo-app/services/ajax', ['exports', 'ember-ajax/services/ajax'], function (exports, _ajax) {
   'use strict';
