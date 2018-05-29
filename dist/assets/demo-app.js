@@ -2,16 +2,25 @@
 
 
 
+define('demo-app/adapters/application', ['exports', 'ember-data'], function (exports, _emberData) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = _emberData.default.JSONAPIAdapter.extend({
+    host: 'http://localhost:5001/express-nodejs/us-central1/app'
+  });
+});
 define('demo-app/app', ['exports', 'demo-app/resolver', 'ember-load-initializers', 'demo-app/config/environment'], function (exports, _resolver, _emberLoadInitializers, _environment) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  var Application = Ember.Application;
 
 
-  var App = Application.extend({
+  var App = Ember.Application.extend({
     modulePrefix: _environment.default.modulePrefix,
     podModulePrefix: _environment.default.podModulePrefix,
     Resolver: _resolver.default
@@ -27,9 +36,7 @@ define('demo-app/components/credential-row/component', ['exports'], function (ex
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  var Component = Ember.Component;
-  var get = Ember.get;
-  exports.default = Component.extend({
+  exports.default = Ember.Component.extend({
     actions: {
       onUpdateCredential: function onUpdateCredential() {
         // let onUpdate = get(this, 'onUpdateCredential');
@@ -43,7 +50,7 @@ define("demo-app/components/credential-row/template", ["exports"], function (exp
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.default = Ember.HTMLBars.template({ "id": "D++dAUxh", "block": "{\"symbols\":[\"&default\"],\"statements\":[[6,\"tr\"],[7],[0,\"\\n  \"],[6,\"td\"],[7],[1,[18,\"label\"],false],[8],[0,\"\\n  \"],[6,\"td\"],[7],[1,[25,\"input\",null,[[\"value\"],[[19,0,[\"userId\"]]]]],false],[8],[0,\"\\n  \"],[6,\"td\"],[7],[1,[25,\"input\",null,[[\"value\"],[[19,0,[\"password\"]]]]],false],[8],[0,\"\\n  \"],[6,\"td\"],[7],[6,\"button\"],[10,\"onclick\",[25,\"action\",[[19,0,[]],\"onUpdateCredential\"],null],null],[7],[0,\"Update\"],[8],[8],[0,\"\\n\"],[8],[0,\"\\n\"],[11,1]],\"hasEval\":false}", "meta": { "moduleName": "demo-app/components/credential-row/template.hbs" } });
+  exports.default = Ember.HTMLBars.template({ "id": "QmsilB43", "block": "{\"symbols\":[\"&default\"],\"statements\":[[6,\"tr\"],[7],[0,\"\\n  \"],[6,\"td\"],[7],[1,[18,\"label\"],false],[8],[0,\"\\n  \"],[6,\"td\"],[7],[1,[25,\"input\",null,[[\"value\"],[[20,[\"userId\"]]]]],false],[8],[0,\"\\n  \"],[6,\"td\"],[7],[1,[25,\"input\",null,[[\"value\"],[[20,[\"password\"]]]]],false],[8],[0,\"\\n  \"],[6,\"td\"],[7],[6,\"button\"],[10,\"onclick\",[25,\"action\",[[19,0,[]],\"onUpdateCredential\"],null],null],[7],[0,\"Update\"],[8],[8],[0,\"\\n\"],[8],[0,\"\\n\"],[11,1]],\"hasEval\":false}", "meta": { "moduleName": "demo-app/components/credential-row/template.hbs" } });
 });
 define('demo-app/components/welcome-page', ['exports', 'ember-welcome-page/components/welcome-page'], function (exports, _welcomePage) {
   'use strict';
@@ -65,19 +72,33 @@ define('demo-app/helpers/app-version', ['exports', 'demo-app/config/environment'
     value: true
   });
   exports.appVersion = appVersion;
-  var version = _environment.default.APP.version;
   function appVersion(_) {
     var hash = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-    if (hash.hideSha) {
-      return version.match(_regexp.versionRegExp)[0];
+    var version = _environment.default.APP.version;
+    // e.g. 1.0.0-alpha.1+4jds75hf
+
+    // Allow use of 'hideSha' and 'hideVersion' For backwards compatibility
+    var versionOnly = hash.versionOnly || hash.hideSha;
+    var shaOnly = hash.shaOnly || hash.hideVersion;
+
+    var match = null;
+
+    if (versionOnly) {
+      if (hash.showExtended) {
+        match = version.match(_regexp.versionExtendedRegExp); // 1.0.0-alpha.1
+      }
+      // Fallback to just version
+      if (!match) {
+        match = version.match(_regexp.versionRegExp); // 1.0.0
+      }
     }
 
-    if (hash.hideVersion) {
-      return version.match(_regexp.shaRegExp)[0];
+    if (shaOnly) {
+      match = version.match(_regexp.shaRegExp); // 4jds75hf
     }
 
-    return version;
+    return match ? match[0] : version;
   }
 
   exports.default = Ember.Helper.helper(appVersion);
@@ -104,8 +125,7 @@ define('demo-app/index/controller', ['exports'], function (exports) {
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  var Controller = Ember.Controller;
-  exports.default = Controller.extend({});
+  exports.default = Ember.Controller.extend({});
 });
 define('demo-app/index/route', ['exports'], function (exports) {
   'use strict';
@@ -113,27 +133,10 @@ define('demo-app/index/route', ['exports'], function (exports) {
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  var Route = Ember.Route;
-  var A = Ember.A;
-  exports.default = Route.extend({
+  exports.default = Ember.Route.extend({
+    store: Ember.inject.service(),
     model: function model() {
-      return A([{
-        label: 'Apple ID',
-        userId: 'minhtq.nouvo@gmail.com',
-        password: 'Nouvo010884'
-      }, {
-        label: 'Facebook',
-        userId: 'tietquocminh',
-        password: 'Cmscml@2017'
-      }, {
-        label: 'Gmail',
-        userId: 'minhtq.nouvo@gmail.com',
-        password: 'Mapafoi@2017'
-      }, {
-        label: 'Gmail',
-        userId: 'batamle@gmail.com',
-        password: 'tathithule'
-      }]);
+      return Ember.get(this, 'store').findAll('credential');
     }
   });
 });
@@ -143,7 +146,7 @@ define("demo-app/index/template", ["exports"], function (exports) {
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.default = Ember.HTMLBars.template({ "id": "itSV5w9P", "block": "{\"symbols\":[\"credential\"],\"statements\":[[6,\"h2\"],[7],[0,\"My Vault\"],[8],[0,\"\\n\"],[6,\"h3\"],[7],[0,\"The place to store credentials\"],[8],[0,\"\\n\"],[6,\"table\"],[7],[0,\"\\n\"],[4,\"each\",[[19,0,[\"model\"]]],null,{\"statements\":[[0,\"    \"],[1,[25,\"credential-row\",null,[[\"label\",\"userId\",\"password\"],[[19,1,[\"label\"]],[19,1,[\"userId\"]],[19,1,[\"password\"]]]]],false],[0,\"\\n\"]],\"parameters\":[1]},null],[8],[0,\"\\n\"],[1,[18,\"outlet\"],false]],\"hasEval\":false}", "meta": { "moduleName": "demo-app/index/template.hbs" } });
+  exports.default = Ember.HTMLBars.template({ "id": "gwoR4hro", "block": "{\"symbols\":[\"credential\"],\"statements\":[[6,\"h2\"],[7],[0,\"My Vault\"],[8],[0,\"\\n\"],[6,\"h3\"],[7],[0,\"The place to store credentials\"],[8],[0,\"\\n\"],[6,\"table\"],[7],[0,\"\\n\"],[4,\"each\",[[20,[\"model\"]]],null,{\"statements\":[[0,\"    \"],[1,[25,\"credential-row\",null,[[\"label\",\"userId\",\"password\"],[[19,1,[\"label\"]],[19,1,[\"userId\"]],[19,1,[\"password\"]]]]],false],[0,\"\\n\"]],\"parameters\":[1]},null],[8],[0,\"\\n\"],[1,[18,\"outlet\"],false]],\"hasEval\":false}", "meta": { "moduleName": "demo-app/index/template.hbs" } });
 });
 define('demo-app/initializers/app-version', ['exports', 'ember-cli-app-version/initializer-factory', 'demo-app/config/environment'], function (exports, _initializerFactory, _environment) {
   'use strict';
@@ -151,9 +154,15 @@ define('demo-app/initializers/app-version', ['exports', 'ember-cli-app-version/i
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  var _config$APP = _environment.default.APP,
-      name = _config$APP.name,
-      version = _config$APP.version;
+
+
+  var name = void 0,
+      version = void 0;
+  if (_environment.default.APP) {
+    name = _environment.default.APP.name;
+    version = _environment.default.APP.version;
+  }
+
   exports.default = {
     name: 'App Version',
     initialize: (0, _initializerFactory.default)(name, version)
@@ -302,8 +311,7 @@ define('demo-app/login/controller', ['exports'], function (exports) {
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  var Controller = Ember.Controller;
-  exports.default = Controller.extend({});
+  exports.default = Ember.Controller.extend({});
 });
 define('demo-app/login/route', ['exports'], function (exports) {
   'use strict';
@@ -311,8 +319,7 @@ define('demo-app/login/route', ['exports'], function (exports) {
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  var Route = Ember.Route;
-  exports.default = Route.extend({});
+  exports.default = Ember.Route.extend({});
 });
 define("demo-app/login/template", ["exports"], function (exports) {
   "use strict";
@@ -321,6 +328,19 @@ define("demo-app/login/template", ["exports"], function (exports) {
     value: true
   });
   exports.default = Ember.HTMLBars.template({ "id": "xkJKn2F4", "block": "{\"symbols\":[],\"statements\":[[1,[18,\"outlet\"],false]],\"hasEval\":false}", "meta": { "moduleName": "demo-app/login/template.hbs" } });
+});
+define('demo-app/models/credential', ['exports', 'ember-data'], function (exports, _emberData) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  var attr = _emberData.default.attr;
+  exports.default = _emberData.default.Model.extend({
+    label: attr(''),
+    userId: attr(''),
+    password: attr('')
+  });
 });
 define('demo-app/resolver', ['exports', 'ember-resolver'], function (exports, _emberResolver) {
   'use strict';
@@ -336,10 +356,9 @@ define('demo-app/router', ['exports', 'demo-app/config/environment'], function (
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  var EmberRouter = Ember.Router;
 
 
-  var Router = EmberRouter.extend({
+  var Router = Ember.Router.extend({
     location: _environment.default.locationType,
     rootURL: _environment.default.rootURL
   });
@@ -349,6 +368,14 @@ define('demo-app/router', ['exports', 'demo-app/config/environment'], function (
   });
 
   exports.default = Router;
+});
+define('demo-app/serializers/application', ['exports', 'ember-data'], function (exports, _emberData) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = _emberData.default.JSONAPISerializer.extend({});
 });
 define('demo-app/services/ajax', ['exports', 'ember-ajax/services/ajax'], function (exports, _ajax) {
   'use strict';
@@ -393,6 +420,6 @@ catch(err) {
 });
 
 if (!runningTests) {
-  require("demo-app/app")["default"].create({"name":"demo-app","version":"0.0.0+434dfe86"});
+  require("demo-app/app")["default"].create({"name":"demo-app","version":"0.0.0+8760090e"});
 }
 //# sourceMappingURL=demo-app.map
