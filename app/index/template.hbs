@@ -1,0 +1,8 @@
+<h2>My Vault</h2>
+<h3>The place to store credentials</h3>
+<table>
+  {{#each model as |credential|}}
+    {{credential-row label=credential.label userId=credential.userId password=credential.password}}
+  {{/each}}
+</table>
+{{outlet}}
