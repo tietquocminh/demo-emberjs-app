@@ -9,11 +9,8 @@ define('demo-app/adapters/application', ['exports', 'ember-data'], function (exp
     value: true
   });
   exports.default = _emberData.default.JSONAPIAdapter.extend({
-    host: 'https://express-nodejs.firebaseapp.com'
-    /*init() {
-      this.headers = {};
-      set(this.headers, 'Access-Control-Allow-Origin', '*');
-    }*/
+    // host: 'https://express-nodejs.firebaseapp.com', // local
+    host: 'http://localhost:5001/myvault-id8/us-central1/app'
   });
 });
 define('demo-app/app', ['exports', 'demo-app/resolver', 'ember-load-initializers', 'demo-app/config/environment'], function (exports, _resolver, _emberLoadInitializers, _environment) {
@@ -34,27 +31,21 @@ define('demo-app/app', ['exports', 'demo-app/resolver', 'ember-load-initializers
 
   exports.default = App;
 });
-define('demo-app/components/credential-row/component', ['exports'], function (exports) {
+define('demo-app/components/employee-row/component', ['exports'], function (exports) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.default = Ember.Component.extend({
-    actions: {
-      onUpdateCredential: function onUpdateCredential() {
-        // let onUpdate = get(this, 'onUpdateCredential');
-      }
-    }
-  });
+  exports.default = Ember.Component.extend({});
 });
-define("demo-app/components/credential-row/template", ["exports"], function (exports) {
+define("demo-app/components/employee-row/template", ["exports"], function (exports) {
   "use strict";
 
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.default = Ember.HTMLBars.template({ "id": "QmsilB43", "block": "{\"symbols\":[\"&default\"],\"statements\":[[6,\"tr\"],[7],[0,\"\\n  \"],[6,\"td\"],[7],[1,[18,\"label\"],false],[8],[0,\"\\n  \"],[6,\"td\"],[7],[1,[25,\"input\",null,[[\"value\"],[[20,[\"userId\"]]]]],false],[8],[0,\"\\n  \"],[6,\"td\"],[7],[1,[25,\"input\",null,[[\"value\"],[[20,[\"password\"]]]]],false],[8],[0,\"\\n  \"],[6,\"td\"],[7],[6,\"button\"],[10,\"onclick\",[25,\"action\",[[19,0,[]],\"onUpdateCredential\"],null],null],[7],[0,\"Update\"],[8],[8],[0,\"\\n\"],[8],[0,\"\\n\"],[11,1]],\"hasEval\":false}", "meta": { "moduleName": "demo-app/components/credential-row/template.hbs" } });
+  exports.default = Ember.HTMLBars.template({ "id": "eAkP9JIa", "block": "{\"symbols\":[\"&default\"],\"statements\":[[11,1]],\"hasEval\":false}", "meta": { "moduleName": "demo-app/components/employee-row/template.hbs" } });
 });
 define('demo-app/components/welcome-page', ['exports', 'ember-welcome-page/components/welcome-page'], function (exports, _welcomePage) {
   'use strict';
@@ -140,7 +131,7 @@ define('demo-app/index/route', ['exports'], function (exports) {
   exports.default = Ember.Route.extend({
     store: Ember.inject.service(),
     model: function model() {
-      return Ember.get(this, 'store').findAll('credential');
+      return Ember.get(this, 'store').findAll('employee');
     }
   });
 });
@@ -346,6 +337,14 @@ define('demo-app/models/credential', ['exports', 'ember-data'], function (export
     password: attr('')
   });
 });
+define('demo-app/models/employee', ['exports', 'ember-data'], function (exports, _emberData) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = _emberData.default.Model.extend({});
+});
 define('demo-app/resolver', ['exports', 'ember-resolver'], function (exports, _emberResolver) {
   'use strict';
 
@@ -428,6 +427,6 @@ catch(err) {
 });
 
 if (!runningTests) {
-  require("demo-app/app")["default"].create({"name":"demo-app","version":"0.0.0+a0028b73"});
+  require("demo-app/app")["default"].create({"name":"demo-app","version":"0.0.0+a93fab09"});
 }
 //# sourceMappingURL=demo-app.map

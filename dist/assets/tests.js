@@ -15,9 +15,9 @@ define('demo-app/tests/app.lint-test', [], function () {
     assert.ok(true, 'app.js should pass ESLint\n\n');
   });
 
-  QUnit.test('components/credential-row/component.js', function (assert) {
+  QUnit.test('components/employee-row/component.js', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'components/credential-row/component.js should pass ESLint\n\n2:10 - \'get\' is defined but never used. (no-unused-vars)');
+    assert.ok(true, 'components/employee-row/component.js should pass ESLint\n\n');
   });
 
   QUnit.test('index/controller.js', function (assert) {
@@ -43,6 +43,11 @@ define('demo-app/tests/app.lint-test', [], function () {
   QUnit.test('models/credential.js', function (assert) {
     assert.expect(1);
     assert.ok(true, 'models/credential.js should pass ESLint\n\n');
+  });
+
+  QUnit.test('models/employee.js', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'models/employee.js should pass ESLint\n\n');
   });
 
   QUnit.test('resolver.js', function (assert) {
@@ -136,10 +141,10 @@ define('demo-app/tests/helpers/start-app', ['exports', 'demo-app/app', 'demo-app
     });
   }
 });
-define('demo-app/tests/integration/components/credential-row/component-test', ['ember-qunit'], function (_emberQunit) {
+define('demo-app/tests/integration/components/employee-row/component-test', ['ember-qunit'], function (_emberQunit) {
   'use strict';
 
-  (0, _emberQunit.moduleForComponent)('credential-row', 'Integration | Component | credential row', {
+  (0, _emberQunit.moduleForComponent)('employee-row', 'Integration | Component | employee row', {
     integration: true
   });
 
@@ -148,8 +153,8 @@ define('demo-app/tests/integration/components/credential-row/component-test', ['
     // Handle any actions with this.on('myAction', function(val) { ... });
 
     this.render(Ember.HTMLBars.template({
-      "id": "aBEApypA",
-      "block": "{\"symbols\":[],\"statements\":[[1,[18,\"credential-row\"],false]],\"hasEval\":false}",
+      "id": "0NeJ3fu6",
+      "block": "{\"symbols\":[],\"statements\":[[1,[18,\"employee-row\"],false]],\"hasEval\":false}",
       "meta": {}
     }));
 
@@ -157,8 +162,8 @@ define('demo-app/tests/integration/components/credential-row/component-test', ['
 
     // Template block usage:
     this.render(Ember.HTMLBars.template({
-      "id": "9mZtKFo0",
-      "block": "{\"symbols\":[],\"statements\":[[0,\"\\n\"],[4,\"credential-row\",null,null,{\"statements\":[[0,\"      template block text\\n\"]],\"parameters\":[]},null],[0,\"  \"]],\"hasEval\":false}",
+      "id": "4QT5QSIW",
+      "block": "{\"symbols\":[],\"statements\":[[0,\"\\n\"],[4,\"employee-row\",null,null,{\"statements\":[[0,\"      template block text\\n\"]],\"parameters\":[]},null],[0,\"  \"]],\"hasEval\":false}",
       "meta": {}
     }));
 
@@ -196,9 +201,9 @@ define('demo-app/tests/tests.lint-test', [], function () {
     assert.ok(true, 'helpers/start-app.js should pass ESLint\n\n');
   });
 
-  QUnit.test('integration/components/credential-row/component-test.js', function (assert) {
+  QUnit.test('integration/components/employee-row/component-test.js', function (assert) {
     assert.expect(1);
-    assert.ok(true, 'integration/components/credential-row/component-test.js should pass ESLint\n\n');
+    assert.ok(true, 'integration/components/employee-row/component-test.js should pass ESLint\n\n');
   });
 
   QUnit.test('test-helper.js', function (assert) {
@@ -234,6 +239,11 @@ define('demo-app/tests/tests.lint-test', [], function () {
   QUnit.test('unit/models/credential-test.js', function (assert) {
     assert.expect(1);
     assert.ok(true, 'unit/models/credential-test.js should pass ESLint\n\n');
+  });
+
+  QUnit.test('unit/models/employee-test.js', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'unit/models/employee-test.js should pass ESLint\n\n');
   });
 
   QUnit.test('unit/serializers/application-test.js', function (assert) {
@@ -313,6 +323,20 @@ define('demo-app/tests/unit/models/credential-test', ['ember-qunit'], function (
   'use strict';
 
   (0, _emberQunit.moduleForModel)('credential', 'Unit | Model | credential', {
+    // Specify the other units that are required for this test.
+    needs: []
+  });
+
+  (0, _emberQunit.test)('it exists', function (assert) {
+    var model = this.subject();
+    // let store = this.store();
+    assert.ok(!!model);
+  });
+});
+define('demo-app/tests/unit/models/employee-test', ['ember-qunit'], function (_emberQunit) {
+  'use strict';
+
+  (0, _emberQunit.moduleForModel)('employee', 'Unit | Model | employee', {
     // Specify the other units that are required for this test.
     needs: []
   });

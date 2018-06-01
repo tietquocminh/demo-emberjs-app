@@ -6,6 +6,6 @@ import { get } from '@ember/object';
 export default Route.extend({
   store: inject(),
   model() {
-    return get(this, 'store').findAll('credential');
+    return get(this, 'store').findAll('employee');
   }
 });
