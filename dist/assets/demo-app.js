@@ -9,7 +9,11 @@ define('demo-app/adapters/application', ['exports', 'ember-data'], function (exp
     value: true
   });
   exports.default = _emberData.default.JSONAPIAdapter.extend({
-    host: 'http://localhost:5001/express-nodejs/us-central1/app'
+    host: 'https://express-nodejs.firebaseapp.com'
+    /*init() {
+      this.headers = {};
+      set(this.headers, 'Access-Control-Allow-Origin', '*');
+    }*/
   });
 });
 define('demo-app/app', ['exports', 'demo-app/resolver', 'ember-load-initializers', 'demo-app/config/environment'], function (exports, _resolver, _emberLoadInitializers, _environment) {
@@ -424,6 +428,6 @@ catch(err) {
 });
 
 if (!runningTests) {
-  require("demo-app/app")["default"].create({"name":"demo-app","version":"0.0.0+8760090e"});
+  require("demo-app/app")["default"].create({"name":"demo-app","version":"0.0.0+a0028b73"});
 }
 //# sourceMappingURL=demo-app.map

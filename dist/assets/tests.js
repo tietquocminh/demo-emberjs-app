@@ -7,7 +7,7 @@ define('demo-app/tests/app.lint-test', [], function () {
 
   QUnit.test('adapters/application.js', function (assert) {
     assert.expect(1);
-    assert.ok(true, 'adapters/application.js should pass ESLint\n\n');
+    assert.ok(false, 'adapters/application.js should pass ESLint\n\n2:10 - \'set\' is defined but never used. (no-unused-vars)');
   });
 
   QUnit.test('app.js', function (assert) {

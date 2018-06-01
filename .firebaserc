@@ -1,7 +1,5 @@
 {
   "projects": {
-    "default": "client1-7770a",
-    "vault-test": "myvault-id8",
-    "vault-test1": "myvault-id8"
+    "default": "myvault-id8"
   }
 }
